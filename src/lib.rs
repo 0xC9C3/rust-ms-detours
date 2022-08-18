@@ -9,6 +9,9 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 mod tests {
     use std::ffi::{CStr, CString};
     use std::ptr;
+    use winapi::shared::minwindef::{BOOL, ULONG};
+    use winapi::um::libloaderapi::{GetModuleHandleA, GetProcAddress};
+    use winapi::um::winnt::{LPCSTR};
     use super::*;
 
     #[test]
@@ -22,9 +25,8 @@ mod tests {
             let kernel_dll_handle = GetModuleHandleA(module.as_ptr());
             let raw_p = GetProcAddress(kernel_dll_handle, function.as_ptr());
 
-            assert!(raw_p.is_some());
+            assert_ne!(raw_p as usize, 0);
 
-            let raw_p = raw_p.unwrap();
             assert_eq!(detours_p as usize, raw_p as usize);
         }
     }
@@ -50,7 +52,7 @@ mod tests {
         }
     }
 
-    unsafe extern "C" fn exports_cb(pContext: PVOID, nOrdinal: ULONG, pszName: LPCSTR, pCode: PVOID) -> BOOL
+    unsafe extern "C" fn exports_cb(pContext: *mut std::ffi::c_void, nOrdinal: ULONG, pszName: LPCSTR, pCode: *mut std::ffi::c_void) -> BOOL
     {
         println!("pContext {:#?}", pContext);
         println!("nOrdinal {:#?}", nOrdinal);

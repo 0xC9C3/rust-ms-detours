@@ -13,3 +13,6 @@ repository = "https://github.com/0xC9C3/rust-ms-detours"
 [build-dependencies]
 bindgen = "0.60.1"
 cc = "1.0.73"
+
+[dev-dependencies]
+winapi = { version = "0.3", features = ["minwindef", "libloaderapi"] }
