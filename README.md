@@ -1,6 +1,6 @@
 # ms-detours
 
-[![crates.io](https://img.shields.io/crates/v/bindgen.svg)](https://crates.io/crates/ms-detours)
+[![crates.io](https://img.shields.io/crates/v/ms-detours.svg)](https://crates.io/crates/ms-detours)
 
 Rust wrapper for [Microsoft Detours](https://github.com/microsoft/Detours)
 
