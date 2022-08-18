@@ -5,6 +5,8 @@ edition = "2021"
 license = "MIT"
 description = "bindgen generated wrapper for Microsoft Detours"
 repository = "https://github.com/0xC9C3/rust-ms-detours"
+readme = "README.md"
+documentation = "https://github.com/microsoft/Detours/wiki"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
