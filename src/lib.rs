@@ -46,7 +46,6 @@ mod tests {
             let h_module = DetourEnumerateModules(ptr::null_mut());
             let h_module = DetourEnumerateModules(h_module);
             let success = DetourEnumerateExports(h_module, ptr::null_mut(), Some(exports_cb));
-            println!("====> {:#?}", GetLastError());
             assert!(success > 0);
         }
     }
