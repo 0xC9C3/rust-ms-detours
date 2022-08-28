@@ -1,6 +1,6 @@
 [package]
 name = "ms-detours"
-version = "4.0.2"
+version = "4.0.3"
 edition = "2021"
 license = "MIT"
 description = "bindgen generated wrapper for Microsoft Detours"
