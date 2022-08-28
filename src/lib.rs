@@ -3,7 +3,8 @@
 #![allow(non_snake_case)]
 #![allow(unaligned_references)]
 
-include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+mod bindings;
+pub use bindings::*;
 
 #[cfg(test)]
 mod tests {

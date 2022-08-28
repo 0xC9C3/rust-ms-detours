@@ -48,12 +48,12 @@ fn main() {
     tool.to_command()
         .current_dir(&build)
         .args(
-        [
-            "vc\\Detours.sln",
-            "/p:Configuration=ReleaseMD",
-            format!("/p:Platform={}", msvc_platform).as_str(),
-        ]
-    )
+            [
+                "vc\\Detours.sln",
+                "/p:Configuration=ReleaseMD",
+                format!("/p:Platform={}", msvc_platform).as_str(),
+            ]
+        )
         .status()
         .unwrap();
 
@@ -69,6 +69,11 @@ fn main() {
     // Tell cargo to invalidate the built crate whenever the wrapper changes
     println!("cargo:rerun-if-changed=wrapper.h");
 
+    // generate_bindings(build);
+}
+
+fn generate_bindings(build: PathBuf) {
+
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
@@ -76,49 +81,7 @@ fn main() {
         // The input header we would like to generate
         // bindings for.
         .header(build.join("wrapper.h").to_str().unwrap())
-        .allowlist_function("DetourTransactionBegin")
-        .allowlist_function("DetourUpdateThread")
-        .allowlist_function("DetourAttach")
-        .allowlist_function("DetourAttachEx")
-        .allowlist_function("DetourAllocateRegionWithinJumpBounds")
-        .allowlist_function("DetourDetach")
-        .allowlist_function("DetourSetIgnoreTooSmall")
-        .allowlist_function("DetourSetRetainRegions")
-        .allowlist_function("DetourSetSystemRegionLowerBound")
-        .allowlist_function("DetourSetSystemRegionUpperBound")
-        .allowlist_function("DetourTransactionAbort")
-        .allowlist_function("DetourTransactionCommit")
-        .allowlist_function("DetourTransactionCommitEx")
-        .allowlist_function("DetourFindFunction")
-        .allowlist_function("DetourCodeFromPointer")
-        .allowlist_function("DetourEnumerateModules")
-        .allowlist_function("DetourGetEntryPoint")
-        .allowlist_function("DetourGetModuleSize")
-        .allowlist_function("DetourEnumerateExports")
-        .allowlist_function("DetourEnumerateImport")
-        .allowlist_function("DetourEnumerateImportEx")
-        .allowlist_function("DetourFindPayload")
-        .allowlist_function("DetourFindPayloadEx")
-        .allowlist_function("DetourFindRemotePayload")
-        .allowlist_function("DetourGetContainingModule")
-        .allowlist_function("DetourGetSizeOfPayloads")
-        .allowlist_function("DetourBinaryOpen")
-        .allowlist_function("DetourBinaryEnumeratePayloads")
-        .allowlist_function("DetourBinaryFindPayload")
-        .allowlist_function("DetourBinarySetPayload")
-        .allowlist_function("DetourBinaryDeletePayload")
-        .allowlist_function("DetourBinaryPurgePayloads")
-        .allowlist_function("DetourBinaryEditImports")
-        .allowlist_function("DetourBinaryResetImports")
-        .allowlist_function("DetourBinaryWrite")
-        .allowlist_function("DetourBinaryClose")
-        .allowlist_function("DetourCreateProcessWithDllEx")
-        .allowlist_function("DetourCreateProcessWithDlls")
-        .allowlist_function("DetourCopyPayloadToProcess")
-        .allowlist_function("DetourCopyPayloadToProcessEx")
-        .allowlist_function("DetourFinishHelperProcess")
-        .allowlist_function("DetourIsHelperProcess")
-        .allowlist_function("DetourRestoreAfterWith")
+        .allowlist_function("Detour.*")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .layout_tests(false)
@@ -128,8 +91,7 @@ fn main() {
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
 
-    // Write the bindings to the $OUT_DIR/bindings.rs file.
-    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+    let out_path = PathBuf::from("src");
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
