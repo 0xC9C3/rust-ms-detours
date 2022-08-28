@@ -69,7 +69,7 @@ fn main() {
     // Tell cargo to invalidate the built crate whenever the wrapper changes
     println!("cargo:rerun-if-changed=wrapper.h");
 
-    // generate_bindings(build);
+    //generate_bindings(build);
 }
 
 fn generate_bindings(build: PathBuf) {
@@ -82,6 +82,37 @@ fn generate_bindings(build: PathBuf) {
         // bindings for.
         .header(build.join("wrapper.h").to_str().unwrap())
         .allowlist_function("Detour.*")
+        .blocklist_type("LP.*")
+        .blocklist_type("_GUID")
+        .blocklist_type("GUID")
+        .blocklist_type("ULONG")
+        .blocklist_type("PVOID")
+        .blocklist_type("DWORD")
+        .blocklist_type("wchar_t")
+        .blocklist_type("BOOL")
+        .blocklist_type("BYTE")
+        .blocklist_type("WORD")
+        .blocklist_type("PBYTE")
+        .blocklist_type("PDWORD")
+        .blocklist_type("INT")
+        .blocklist_type("CHAR")
+        .blocklist_type("LONG")
+        .blocklist_type("WCHAR")
+        .blocklist_type("HANDLE")
+        .blocklist_type("HMODULE")
+        .blocklist_type("HINSTANCE.*")
+        .blocklist_type("HWND.*")
+        .blocklist_type("_SECURITY_ATTRIBUTES")
+        .blocklist_type("_PROCESS_INFORMATION")
+        .blocklist_type("_STARTUPINFOA")
+        .blocklist_type("_STARTUPINFOW")
+        .raw_line("use winapi::shared::minwindef::*;")
+        .raw_line("use winapi::um::winnt::*;")
+        .raw_line("use winapi::um::winnt::{INT};")
+        .raw_line("use winapi::um::minwinbase::*;")
+        .raw_line("use winapi::um::processthreadsapi::*;")
+        .raw_line("use winapi::shared::guiddef::*;")
+        .raw_line("use winapi::shared::windef::*;")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .layout_tests(false)

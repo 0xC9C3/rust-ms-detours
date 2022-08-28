@@ -53,7 +53,7 @@ mod tests {
         }
     }
 
-    unsafe extern "C" fn exports_cb(pContext: *mut std::ffi::c_void, nOrdinal: ULONG, pszName: LPCSTR, pCode: *mut std::ffi::c_void) -> BOOL
+    unsafe extern "C" fn exports_cb(pContext: *mut winapi::ctypes::c_void, nOrdinal: ULONG, pszName: LPCSTR, pCode: *mut winapi::ctypes::c_void) -> BOOL
     {
         println!("pContext {:#?}", pContext);
         println!("nOrdinal {:#?}", nOrdinal);
