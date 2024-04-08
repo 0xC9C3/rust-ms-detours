@@ -18,7 +18,7 @@ macro_rules! t {
 
 fn main() {
     let src = get_detours_folder();
-    let tool = find_tool("msvc", "msbuild").unwrap();
+    let tool = find_tool("x86_64-pc-windows-msvc", "msbuild").unwrap();
 
     let target = env::var("TARGET").expect("TARGET not found in environment");
 
