@@ -1,6 +1,6 @@
 [package]
 name = "ms-detours"
-version = "4.0.4"
+version = "4.0.5"
 edition = "2021"
 license = "MIT"
 description = "bindgen generated wrapper for Microsoft Detours"
@@ -14,5 +14,5 @@ documentation = "https://github.com/microsoft/Detours/wiki"
 winapi = { version = "0.3", features = ["minwindef", "libloaderapi", "processthreadsapi", "windef"] }
 
 [build-dependencies]
-bindgen = "0.69.4"
+bindgen = "0.71.1"
 cc = "1.0.90"

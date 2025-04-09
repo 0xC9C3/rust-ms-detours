@@ -1,0 +1,18 @@
+name: "Test Suite"
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: cargo test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      # test x32
+      - run: cargo test --all-features --target i686-pc-windows-msvc --verbose
+      # test x64
+      - run: cargo test --all-features --target x86_64-pc-windows-msvc --verbose
