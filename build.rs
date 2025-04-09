@@ -18,6 +18,7 @@ macro_rules! t {
 
 fn main() {
     let src = get_detours_folder();
+
     let tool = find_tool("x86_64-pc-windows-msvc", "msbuild").unwrap();
 
     let target = env::var("TARGET").expect("TARGET not found in environment");
@@ -45,7 +46,7 @@ fn main() {
 
     fs::copy(&env::current_dir().unwrap().join("wrapper.h"), &build.join("wrapper.h")).unwrap();
 
-    tool.to_command()
+    let result = tool.to_command()
         .current_dir(&build)
         .args(
             [
@@ -54,15 +55,17 @@ fn main() {
                 format!("/p:Platform={}", msvc_platform).as_str(),
             ]
         )
-        .status()
+        .output()
         .unwrap();
+
+    if !result.status.success() {
+        println!("cargo:warning=msbuild result: {:?}", result);
+    }
 
     // Tell cargo to look for shared libraries in the specified directory
     let target_folder = format!("lib.{}", msvc_platform);
     println!("cargo:rustc-link-search={}", build.join(target_folder).display());
 
-    // Tell cargo to tell rustc to link the system bzip2
-    // shared library.
     println!("cargo:rustc-link-lib=detours");
     println!("cargo:rustc-link-lib=syelog");
 
@@ -116,7 +119,7 @@ fn generate_bindings(build: PathBuf) {
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .layout_tests(false)
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         // Finish the builder and generate the bindings.
         .generate()
         // Unwrap the Result and panic on failure.
@@ -143,5 +146,5 @@ fn cp_r(dir: &Path, dest: &Path) {
 }
 
 fn get_detours_folder() -> PathBuf {
-    env::current_dir().expect("Failed to get the current directory").join("detours")
+    PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap()).join("detours")
 }

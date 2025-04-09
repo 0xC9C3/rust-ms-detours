@@ -1,7 +1,6 @@
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
-#![allow(unaligned_references)]
 
 mod bindings;
 pub use bindings::*;
@@ -53,11 +52,15 @@ mod tests {
         }
     }
 
-    unsafe extern "C" fn exports_cb(pContext: *mut winapi::ctypes::c_void, nOrdinal: ULONG, pszName: LPCSTR, pCode: *mut winapi::ctypes::c_void) -> BOOL
+    unsafe extern "system" fn exports_cb(pContext: *mut winapi::ctypes::c_void, nOrdinal: ULONG, pszName: LPCSTR, pCode: *mut winapi::ctypes::c_void) -> BOOL
     {
         println!("pContext {:#?}", pContext);
         println!("nOrdinal {:#?}", nOrdinal);
-        println!("pszName {:#?}", CStr::from_ptr(pszName));
+        if pszName.is_null() {
+            println!("pszName {:#?}", pszName);
+        } else {
+            println!("pszName {:#?}", CStr::from_ptr(pszName));
+        }
         println!("pCode {:#?}", pCode);
         return 1;
     }
